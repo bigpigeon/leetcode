@@ -29,7 +29,7 @@ Test cases had been added to test the overflow behavior.
 //const MaxInt = int(MaxUint >> 1)
 //const MinInt = -MaxInt - 1
 
-//32-bit integer
+//32-bit integer (well done on 32-bit system)
 const MinInt = -1 << 31
 const MaxInt = -(MinInt + 1)
 
@@ -39,7 +39,6 @@ func reverse(x int) int {
 	}
 	y := 0
 	for x != 0 {
-
 		if y > MaxInt/10 || y < MinInt/10 {
 			return 0
 		}
