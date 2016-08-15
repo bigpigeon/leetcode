@@ -24,12 +24,17 @@ For the purpose of this problem, assume that your function returns 0 when the re
 Update (2014-11-10):
 Test cases had been added to test the overflow behavior.
 */
-// 64-bit integer
+
+// full-bit integer
 //const MaxUint = ^uint(0)
 //const MaxInt = int(MaxUint >> 1)
 //const MinInt = -MaxInt - 1
 
-//32-bit integer (well done on 32-bit system)
+//64-bit integer
+//const MinInt = -1 << 63
+//const MaxInt = -(MinInt + 1)
+
+//32-bit integer
 const MinInt = -1 << 31
 const MaxInt = -(MinInt + 1)
 
