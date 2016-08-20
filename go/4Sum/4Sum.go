@@ -26,6 +26,7 @@ func (s SolutionType) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 
+// return true whather two list is same
 func compareFourSum(s1, s2 []int) bool {
 	if s1 == nil && s2 == nil {
 		return true
