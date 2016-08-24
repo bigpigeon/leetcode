@@ -1,9 +1,3 @@
-package main
-
-import (
-	"fmt"
-)
-
 /*
 Implement atoi to convert a string to an integer.
 
@@ -21,6 +15,11 @@ Subscribe to see which companies asked this question
 If no valid conversion could be performed, a zero value is returned. If the correct value
 is out of the range of representable values, INT_MAX (2147483647) or INT_MIN (-2147483648)
 */
+package main
+
+import (
+	"fmt"
+)
 
 // full-bit integer
 //const MaxUint = ^uint(0)

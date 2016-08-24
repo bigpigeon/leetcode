@@ -1,9 +1,3 @@
-package main
-
-import (
-	"fmt"
-)
-
 /*
 Reverse digits of an integer.
 
@@ -24,6 +18,11 @@ For the purpose of this problem, assume that your function returns 0 when the re
 Update (2014-11-10):
 Test cases had been added to test the overflow behavior.
 */
+package main
+
+import (
+	"fmt"
+)
 
 // full-bit integer
 //const MaxUint = ^uint(0)
