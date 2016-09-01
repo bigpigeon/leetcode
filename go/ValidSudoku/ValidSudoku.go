@@ -6,7 +6,7 @@ Determine if a Sudoku is valid, according to: Sudoku Puzzles - The Rules.
 The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
 
 +-----------+-----+
-|5 3  |     |     |
+|5 3  |  7  |     |
 |6    |1 9 5|     |
 |  9 8|     |  6  |
 |-----+-----+-----+
@@ -72,7 +72,7 @@ func isValidSudoku(board [][]byte) bool {
 
 	for box := 0; box < 9; box++ {
 		digits := map[byte]bool{
-			'0': true, '1': true,
+			'1': true,
 			'2': true, '3': true,
 			'4': true, '5': true,
 			'6': true, '7': true,
