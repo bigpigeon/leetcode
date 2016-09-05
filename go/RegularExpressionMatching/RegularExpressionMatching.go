@@ -30,11 +30,7 @@ import (
 
 func isMatch(s string, p string) bool {
 	if len(p) == 0 {
-		if len(s) == 0 {
-			return true
-		} else {
-			return false
-		}
+		return len(s) == 0
 	}
 
 	m := p[len(p)-1]
