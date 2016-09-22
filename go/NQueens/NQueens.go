@@ -24,6 +24,7 @@ There exist two distinct solutions to the 4-queens puzzle:
 |  ".Q.."]               |
 |]                       |
 +------------------------+
+Merge 51-52
 */
 package main
 
