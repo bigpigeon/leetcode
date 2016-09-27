@@ -28,28 +28,60 @@ func insert(intervals []Interval, newInterval Interval) []Interval {
 	if len(intervals) == 0 {
 		return []Interval{newInterval}
 	}
-	m := []Interval{}
-
+	startVal := newInterval.Start
+	endVal := newInterval.End
+	//find the newInterval.Start position
 	ss, se := 0, len(intervals)
+
 	for ss < se {
 		half := (se-ss)/2 + ss
-		if intervals[half].Start <= newInterval.Start {
-			if intervals[half].End >= newInterval.Start {
-				se, ss = half, half
-				break
-			}
-			ss = half + 1
-		} else {
+		start, end := intervals[half].Start, intervals[half].End
+		if newInterval.Start >= start && newInterval.Start <= end {
+			ss, se = half, half
+			startVal = start
+			break
+		} else if newInterval.Start < start {
 			se = half
+		} else {
+			ss = half + 1
 		}
 	}
 	fmt.Println(ss, se)
-	return m
+
+	if ss < len(intervals) {
+		//find the newInterval.End position
+		es, ee := ss, len(intervals)
+		for es < ee {
+			half := (ee-es)/2 + es
+			start, end := intervals[half].Start, intervals[half].End
+			if newInterval.End >= start && newInterval.End <= end {
+				es, ee = half+1, half+1
+				endVal = end
+				break
+			} else if newInterval.End < start {
+				ee = half
+			} else {
+				es = half + 1
+			}
+		}
+		solution := make([]Interval, len(intervals[:ss]))
+		copy(solution, intervals[:ss])
+		solution = append(solution, Interval{startVal, endVal})
+		if es < len(intervals) {
+			solution = append(solution, intervals[es:]...)
+		}
+		return solution
+	}
+	return append(intervals, Interval{startVal, endVal})
+
 }
 
 func main() {
 	a := []Interval{{1, 3}, {8, 10}, {15, 18}}
+
 	//	sort.Sort(IntervalList(a))
 	fmt.Println(insert(a, Interval{6, 14}))
+	fmt.Println(insert([]Interval{{1, 3}, {4, 5}, {7, 10}, {15, 18}}, Interval{6, 15}))
+	fmt.Println(insert([]Interval{{1, 3}}, Interval{6, 14}))
 
 }
