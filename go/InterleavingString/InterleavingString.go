@@ -11,13 +11,26 @@ s2 = "dbbca",
 When s3 = "aadbbcbcac", return true.
 When s3 = "aadbbbaccc", return false.
 
-s1[0:2]s2[2:4]s1[4:5]s2[5:6]
-s1[0:1]s2[1:4]
+solution:
+make a grid(n X m) to cache s3 path
+n = len(s1)+1
+m = len(s2)+1
+grid[i][j] = (grid[i][j-1] == true && s3[i + j - 1] == s2[j-1]) ||
+             (grid[i-1][j] == true && s3[i + j - 1] == s1[i-1])
 
-a/d b c d e
-c
-d
-e
+result was grid last item value
+
+e.g
+s1 = "aabcc" s2 = "dbbca" s3 = "aadbbcbcac"
++---------------+
+|0 0 d b b c a  |
+|0   x x x x x  |
+|a * x x x x x  |
+|a * * * * * x  |
+|b x * * x * x  |
+|c x x * * * *  |
+|c x x x * x *  |
++---------------+
 */
 package main
 
@@ -54,15 +67,12 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 	for i := 1; i < len(s1)+1; i++ {
 		for j := 1; j < len(s2)+1; j++ {
 			s3curr := i + j - 1
-			if grid[i][j-1] == true && s3[s3curr] == s2[j-1] {
-				grid[i][j] = true
-			}
-			if grid[i-1][j] == true && s3[s3curr] == s1[i-1] {
-				grid[i][j] = true
-			}
+			grid[i][j] = (grid[i][j-1] == true && s3[s3curr] == s2[j-1]) ||
+				(grid[i-1][j] == true && s3[s3curr] == s1[i-1])
+
 		}
 	}
-	//	printGrid(grid)
+	printGrid(grid)
 	return grid[len(s1)][len(s2)]
 }
 
