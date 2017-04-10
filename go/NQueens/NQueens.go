@@ -29,69 +29,92 @@ Merge 51-52
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"os"
 )
 
-func checkSlanting(used []int, line, row int) bool {
-	for uLine, uRow := range used {
-		if (uLine-line) == (uRow-row) || (uLine-line) == -(uRow-row) {
-			return false
-		}
-	}
-	return true
+type UsageRange struct {
+	Start, Last int
+	Data        []bool
 }
 
-func findQueensCombine(n, line int, used []int) [][]int {
-	s := [][]int{}
-	candidate := map[int]bool{}
-	for row := 0; row < n; row++ {
-		if checkSlanting(used, line, row) {
-			candidate[row] = true
-		}
-	}
-	for _, row := range used { //skip the used row
-		delete(candidate, row)
-	}
+func InitUsageRange(start, last int) UsageRange {
+	return UsageRange{start, last, make([]bool, last-start+1)}
+}
 
-	if line < n-1 {
-		for row, _ := range candidate {
-			ret := findQueensCombine(n, line+1, append(used, row))
-			s = append(s, ret...)
-		}
-	} else {
-		for row, _ := range candidate {
-			s = append(s, append(used, row))
-		}
+func (ur *UsageRange) Usage(pos int) bool {
+	return ur.Data[pos-ur.Start]
+}
+
+func (ur *UsageRange) SetUsage(pos int, val bool) {
+	ur.Data[pos-ur.Start] = val
+}
+
+func formatStack(stack []int, n int) []string {
+	strs := make([]string, n)
+	for i := 0; i < n; i++ {
+		b := bytes.Repeat([]byte{'.'}, n)
+		b[stack[i]] = 'Q'
+		strs[i] = string(b)
 	}
-	return s
+	return strs
 }
 
 func solveNQueens(n int) [][]string {
-	s := findQueensCombine(n, 0, []int{})
+	if n == 0 {
+		return [][]string{}
+	}
 	solution := [][]string{}
 	lStr := ""
 	for i := 0; i < n; i++ {
 		lStr += "."
 	}
-	for _, sub := range s {
-		Queens := []string{}
-		for _, row := range sub {
-			sCopy := []byte(lStr)
-			sCopy[row] = 'Q'
-			Queens = append(Queens, string(sCopy))
+	xUsed := make([]bool, n)
+	//sumUsed = (lim [f(x1),f(x2),...])
+	//           x=0
+	sumUsed := InitUsageRange(0, (n-1)*2)
+	// reduceUsed = (lim [f(x1),f(x2),...])
+	//               x=0
+	reduceUsed := InitUsageRange(-(n - 1), (n - 1))
+	stack := make([]int, n)
+	type loopfunc func([]int, loopfunc)
+	var loop = func(s []int, lf loopfunc) {
+		currLine := n - len(s)
+		for i := s[0]; i < n; i++ {
+			for x := 1; x < len(s); x++ {
+				s[x] = 0
+			}
+			if xUsed[i] == false &&
+				sumUsed.Usage(i+currLine) == false &&
+				reduceUsed.Usage(i-currLine) == false {
+
+				xUsed[i] = true
+				sumUsed.SetUsage(i+currLine, true)
+				reduceUsed.SetUsage(i-currLine, true)
+				//				fmt.Println(xUsed, sumUsed, reduceUsed)
+				s[0] = i
+				if len(s) == 1 {
+
+					solution = append(solution, formatStack(stack, n))
+				} else {
+					lf(s[1:], lf)
+				}
+				xUsed[i] = false
+				sumUsed.SetUsage(i+currLine, false)
+				reduceUsed.SetUsage(i-currLine, false)
+			}
 		}
-		solution = append(solution, Queens)
+
 	}
+	loop(stack, loop)
 	return solution
 }
 
-func totalNQueens(n int) int {
-	return len(solveNQueens(n))
-}
-
 func main() {
-	for i := 0; i < 7; i++ {
-		fmt.Println(solveNQueens(i))
-		//		fmt.Println(len(solveNQueens(i)))
+	for i := 1; i < 6; i++ {
+		json.NewEncoder(os.Stdout).Encode(solveNQueens(i))
+		fmt.Println(len(solveNQueens(i)))
 	}
 }
