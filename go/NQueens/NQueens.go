@@ -79,8 +79,8 @@ func solveNQueens(n int) [][]string {
 	//               x=0
 	reduceUsed := InitUsageRange(-(n - 1), (n - 1))
 	stack := make([]int, n)
-	type loopfunc func([]int, loopfunc)
-	var loop = func(s []int, lf loopfunc) {
+	var loop func([]int)
+	loop = func(s []int) {
 		currLine := n - len(s)
 		for i := s[0]; i < n; i++ {
 			for x := 1; x < len(s); x++ {
@@ -99,7 +99,7 @@ func solveNQueens(n int) [][]string {
 
 					solution = append(solution, formatStack(stack, n))
 				} else {
-					lf(s[1:], lf)
+					loop(s[1:])
 				}
 				xUsed[i] = false
 				sumUsed.SetUsage(i+currLine, false)
@@ -108,7 +108,7 @@ func solveNQueens(n int) [][]string {
 		}
 
 	}
-	loop(stack, loop)
+	loop(stack)
 	return solution
 }
 
