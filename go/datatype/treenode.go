@@ -63,3 +63,33 @@ func ListToTreeNode(nums []int) *TreeNode {
 	}
 	return root
 }
+
+func Preorder(root *TreeNode) []int {
+	l := []int{}
+	if root != nil {
+		l = append(l, root.Val)
+		l = append(l, Preorder(root.Left)...)
+		l = append(l, Preorder(root.Right)...)
+	}
+	return l
+}
+
+func Inorder(root *TreeNode) []int {
+	l := []int{}
+	if root != nil {
+		l = append(l, Inorder(root.Left)...)
+		l = append(l, root.Val)
+		l = append(l, Inorder(root.Right)...)
+	}
+	return l
+}
+
+func Postorder(root *TreeNode) []int {
+	l := []int{}
+	if root != nil {
+		l = append(l, Postorder(root.Left)...)
+		l = append(l, Postorder(root.Right)...)
+		l = append(l, root.Val)
+	}
+	return l
+}
