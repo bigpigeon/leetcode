@@ -19,7 +19,16 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
+
+func print(triangle [][]int) {
+	length := len(triangle)
+	for i, l := range triangle {
+		spaces := strings.Repeat(" ", (length-i)*2)
+		fmt.Println(spaces, l)
+	}
+}
 
 func min(a, b int) int {
 	if a < b {
@@ -48,7 +57,5 @@ func generate(numRows int) [][]int {
 }
 
 func main() {
-	for i := 0; i < 10; i++ {
-		fmt.Println(generate(i))
-	}
+	print(generate(14))
 }
