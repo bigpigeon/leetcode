@@ -66,27 +66,27 @@ func copyRandomList(head *Node) *Node {
 	}
 	newHead := &Node{Val: head.Val}
 	// process random node copy first
-	preNodeMap := map[int]*Node{newHead.Val: newHead}
+	preNodeMap := map[*Node]*Node{head: newHead}
 	{
 		node := head
 		for node != nil {
 			if node.Random != nil {
 
 				var randomNode *Node
-				if existed := preNodeMap[node.Random.Val]; existed != nil {
+				if existed := preNodeMap[node.Random]; existed != nil {
 					randomNode = existed
 				} else {
 					randomNode = &Node{Val: node.Random.Val}
-					preNodeMap[randomNode.Val] = randomNode
+					preNodeMap[node.Random] = randomNode
 				}
 				var hasRandom *Node
-				if existed := preNodeMap[node.Val]; existed != nil {
+				if existed := preNodeMap[node]; existed != nil {
 					hasRandom = existed
 				} else {
 					hasRandom = &Node{Val: node.Val}
 				}
 				hasRandom.Random = randomNode
-				preNodeMap[hasRandom.Val] = hasRandom
+				preNodeMap[node] = hasRandom
 			}
 			node = node.Next
 		}
@@ -96,7 +96,7 @@ func copyRandomList(head *Node) *Node {
 	newNode := newHead
 
 	for nextNode != nil {
-		if existed := preNodeMap[nextNode.Val]; existed != nil {
+		if existed := preNodeMap[nextNode]; existed != nil {
 			newNode.Next = existed
 		} else {
 			newNode.Next = &Node{Val: nextNode.Val}
