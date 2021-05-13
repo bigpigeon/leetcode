@@ -49,12 +49,46 @@ Constraints:
 
 package main
 
-func canCompleteCircuit(gas []int, cost []int) int {
-	diff := make([]int, len(gas))
-	for i := range gas {
-		diff[i] = gas[i] - cost[i]
+import "fmt"
+
+func min(a, b int) int {
+	if a > b {
+		return b
 	}
-	for i := range gas {
+	return a
+}
+
+// resolution:
+// create minCost list ,minCost[i]=min(minCost[i-1]+gas[i]-cost[i], gas[i]-cost[i])
+// iterator the minCost list ,if have less than zero value, return -1,other way,
+func canCompleteCircuit(gas []int, cost []int) int {
+	if len(gas) == 0 {
+		return 0
+	}
+	c := len(gas) // length of gas or cost
+	idx := 0
+	idxSum := 0
+	gasSum := 0
+	for i := 0; i < c; i++ {
+		idxSum += gas[i] - cost[i]
+		gasSum += gas[i] - cost[i]
+		if idxSum < 0 {
+			idx = i + 1
+			idxSum = 0
+		}
 
 	}
+	if gasSum < 0 {
+		return -1
+	}
+	return idx
+}
+
+func main() {
+	idx := canCompleteCircuit([]int{1, 2, 3, 4, 5}, []int{3, 4, 5, 1, 2})
+	fmt.Println(idx)
+	idx = canCompleteCircuit([]int{2, 3, 4}, []int{3, 4, 3})
+	fmt.Println(idx)
+	idx = canCompleteCircuit([]int{5, 8, 2, 8}, []int{6, 5, 6, 6})
+	fmt.Println(idx)
 }
